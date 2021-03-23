@@ -1,1 +1,19 @@
-# CodeExamples
+# CodeExamples - Unity
+This folder contains code examples from a current private project. To see the project in action, please go to
+https://www.youtube.com/watch?v=_Sxibu3MUm0&t=4s&ab_channel=Sidremus
+
+On my coding style:
+I generally aim for three things when coding. First, any class should only do one thing - the class name should be unambiguous. This keeps files short and the project tidy.
+
+Second, the code should be readable without comments. Comments have a nasty habit of not being updated when things in the code change. The only thing that's worse than code that's hard to read are comments that give false information about code that's hard to read. The only exceptions I tend to make are when there are debugging information which maybe be useful to get occasionally but don't always have to run (as in Missile.cs, line 123). Or, when a line covers an edge case, which may not seem obvious, but has to be covered (as in EnemyMovement.cs, line 64).
+
+And, last but maybe most importantly, I aim to keep things as human readable as possible. While some calculations may or may not be instantly understandable for an outside reader, for anyone even only vaguely familiar with a given project it should be clear what all the variables and properties are and do. 
+Beyond that I try to keep things as open (ie public) as possible. While some consider it important to keep local variables private and use public properties with Getter and Setter methods, I believe this is a hold over from a more general programming world. While it certainly makes sense when handling more sensitive data, it also clutters up the code significantly. I have never seen a case in game programming (beyond handling account and log in data) where keeping things public did any harm or wasn't even eventually beneficial. 
+I also use camelCase and usually don't distinguish private variables with underscores. Though, this is just a matter of taste.
+
+The first folder (01) contains examples of relatively simple code for a movement controller and other related scripts that would live on a GameObject that the player has direct control over. Note that since this is a private project without greater commercial ambitions I read the controls directly (and via the new Input System) instead of using the Input Actions assets.
+
+The second folder (02) contains examples of slightly more complex behaviors. The EnemyMovement.cs is a basic AI for enemy space ships constructed around a simple finite-state machine (FSM). The behavior is executed in the FixedUpdate cycle, which runs only 60 times per second by default. Because of this it has a relatively low CPU cost allowing for larges swarms of enemy units. 
+The Missile.cs script is an example of a script that lives on a missile GameObject. Depending on the inputs it receives once spawned, it follows a diverse set of rules, trying to hit its target. Since it uses Physics.OverlapSphere() and is able to target both PlayerHealth, as well as EnemyHealth, it is effectively agnostic to what it can hit - it can be fired from Player to NPC, NPC to Player or even NPC to NPC.
+
+The third folder (03) contains a small collection of the scripts which revolve around the weapon systems. The base class Weapon.cs holds only the most basic properties which are shared by all weapons in the game. The MissileWeapon.cs then inherits from it and defines all the necessary properties that all weapons of this type will hold. The three launcher scripts (PlayerMissileLauncher.cs, PlayerBurstMissileLauncher.cs and PlayerSwarmMissileLauncher.cs) then define the individual behaviors of the weapons, specifically how they acquire target lock and how they launch their munitions. They are separated into three scripts to keep the files relatively brief. Finally, the WeaponInventory.cs is a manager that ensures that only one weapon is active at a given time as well as giving information to the UIController.cs, so that the latter can present the appropriate information for any given weapon (this is not yet finalized in the video linked above).
